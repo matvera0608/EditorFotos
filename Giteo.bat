@@ -133,15 +133,13 @@ echo .........................................................................
         git add .
         git commit -m "%COMMIT_MESSAGE%"
         git branch -M 
-        git remote add origin "https://github.com/matvera0608/EditorFotos"
-        @REM SET /P "URL=Ingresa la URL del repositorio de GitHub: "
-        @REM git remote add origin %URL%
+        SET /P "URL=Ingresa la URL del repositorio de GitHub: "
+        git remote add origin %URL%
     ) ELSE (
         echo 📁 Repositorio detectado. Preparando cambios...
         git add .
         git commit -m "%COMMIT_MESSAGE%"
         git branch -M main
-        git remote add origin "https://github.com/matvera0608/EditorFotos"
         GOTO PUSHEO_INICIAL
     )
     GOTO :EOF

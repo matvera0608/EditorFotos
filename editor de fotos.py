@@ -49,14 +49,14 @@ def quitar_fondo_de_la_imagen():
     print("¡Fondo eliminado con éxito!")
     input()
     
-def mejorar_calidad_de_la_imagen():
+def mejorar_calidad_de_la_imagen(image):
     
     directorio = os.path.dirname(os.path.abspath(__file__))
     
     escalas = os.path.join(directorio, "REAL-ESRGAN_SCALE")
     modelo_path = os.path.join(escalas, "RealESRGAN_x4plus.pth")
-    input_path = os.path.join(directorio, "哔哩哔哩的横幅.png")
-    output_path = os.path.join(directorio, "哔哩哔哩的横幅 mejorado.png")
+    input_path = os.path.join(directorio, f"{image}.png")
+    output_path = os.path.join(directorio, f"{image} mejorado.png")
     
     if not os.path.exists(modelo_path):
         print("El modelo no se encuentra en la ruta especificada:", modelo_path)
