@@ -159,7 +159,14 @@ echo .........................................................................
     echo ⚠️  Error en la subida (Rejected o temporal).
     IF !INTENTO_DE_PUSHEO! LEQ 5 (
         echo Intentando sincronizar y reintentar... (Intento !INTENTO_DE_PUSHEO! de 5)
+        REM ----------------------------------------------------
+        REM PASO 1: INTENTAR CONFIGURAR TRACKING SI ES NECESARIO
+        REM Solo intentamos esto en el primer fallo (Intento 1)
+        IF !INTENTO_DE_PUSHEO! EQU 1 (
+            git branch --set-upstream-to=origin/main main
+        )
         git pull --rebase
+        REM ----------------------------------------------------
         IF %ERRORLEVEL% NEQ 0 GOTO CONFLICTO
         echo Rebase exitoso. Reintentando subida...
         git push -u origin main
