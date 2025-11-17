@@ -60,6 +60,7 @@ echo .........................................................................
     SET "LANG_TYPE=%~1"
     IF EXIST .gitignore (
         echo El archivo .gitignore ya existe. No se sobrescribira.
+        GOTO :EOF
     )
     
     IF "%LANG_TYPE%"=="python" (
@@ -126,7 +127,7 @@ echo .........................................................................
 :INICIAR_O_ACTUALIZAR
     echo.
     IF NOT EXIST ".git" (
-        color 0E
+        color 0B
         echo Inicializando nuevo repositorio...
         git init
         git add .
