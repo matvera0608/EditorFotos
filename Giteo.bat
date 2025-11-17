@@ -92,6 +92,7 @@ echo .........................................................................
 :CHECK_INTERNET
     ping -n 1 8.8.8.8 -w 1000 >NUL
     IF %ERRORLEVEL% EQU 0 (
+        color 0A
         SET "INTERNET_STATUS=0"
         echo Conexión a Internet detectada. Continuado con el giteo
     ) ELSE (
@@ -99,17 +100,16 @@ echo .........................................................................
         echo ERROR: No se detectó la conexión a Internet.
     )
     echo Intentando verificar conexión a Internet...
-
     IF %INTERNET_STATUS% EQU 0 (
-    GOTO :EOF
+        GOTO :EOF
     ) ELSE (
         IF !INTENTO! LSS !MAX_INTENTOS! (
             color 0E
             SET /A INTENTO+=1
             echo ERROR: No se detectó la conexión a Internet. Reintentando en 5 segundos... (Intento !INTENTO! de !MAX_INTENTOS!)
             timeout /t 5 /nobreak > NUL
-            GOTO :EOF
-        )
+            GOTO CHECK_INTERNET
+        ) 
         ELSE (
             color 0C
             echo.
