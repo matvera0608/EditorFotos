@@ -18,9 +18,33 @@ REM color 0E es para texto amarillo
 REM 🚀 --- FLUJO PRINCIPAL --- BORRÉ PORQUE HABIA CIERTAS DUPLICACIONE
 CALL :SELECT_LANGUAGE
 IF NOT EXIST .gitignore CALL :CREATE_GITIGNORE
-CALL :CHECK_INTERNET
-CALL :INICIAR_O_ACTUALIZAR
+
+GOTO REINTENTAR_CONEXION
+
 EXIT /B
+
+:REINTENTAR_CONEXION
+    CALL :CHECK_INTERNET
+    IF %INTERNET_STATUS% EQU 0 (
+        GOTO INICIAR_O_ACTUALIZAR
+    ) ELSE (
+            IF !INTENTO! LSS !MAX_INTENTOS! (
+                color 0E
+                SET /A INTENTO+=1
+                echo ERROR: No se detectó la conexión a Internet. Reintentando en 5 segundos... (Intento !INTENTO! de !MAX_INTENTOS!)
+                timeout /t 5 /nobreak > NUL
+                GOTO REINTENTAR_CONEXION
+            ) ELSE (
+                color 0C
+                echo.
+                echo No se puede gitear sin conexión. El proceso está abortado
+                echo.
+                GOTO END_SCRIPT
+            ) 
+    )
+
+CALL :INICIAR_O_ACTUALIZAR
+
 :: ................................
 :: FUNCIONES PRINCIPALES
 :: ................................
@@ -100,27 +124,7 @@ echo .........................................................................
         echo ERROR: No se detectó la conexión a Internet.
     )
     echo Intentando verificar conexión a Internet...
-    IF %INTERNET_STATUS% EQU 0 (
-        GOTO :EOF
-    ) ELSE (
-        IF !INTENTO! LSS !MAX_INTENTOS! (
-            color 0E
-            SET /A INTENTO+=1
-            echo ERROR: No se detectó la conexión a Internet. Reintentando en 5 segundos... (Intento !INTENTO! de !MAX_INTENTOS!)
-            timeout /t 5 /nobreak > NUL
-            GOTO CHECK_INTERNET
-        ) 
-        ELSE (
-            color 0C
-            echo.
-            echo No se puede gitear sin conexión. El proceso está abortado
-            echo.
-            GOTO END_SCRIPT
-        ) 
-    )
-    GOTO :EOF
-
-
+    
 echo .........................................................................
 
 :INICIAR_O_ACTUALIZAR
