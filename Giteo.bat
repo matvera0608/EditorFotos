@@ -2,7 +2,7 @@
 chcp 65001
 SETLOCAL ENABLEDELAYEDEXPANSION
 SET MAX_INTENTOS=5
-SET INTENTO=0
+SET INTENTO=5
 SET INTENTO_DE_PUSHEO=1
 SET COMMIT_MESSAGE=Mi primer proyecto de edición
 echo .........................................................................
@@ -124,7 +124,7 @@ echo .........................................................................
         echo ERROR: No se detectó la conexión a Internet.
     )
     echo Intentando verificar conexión a Internet...
-    
+
 echo .........................................................................
 
 :INICIAR_O_ACTUALIZAR
