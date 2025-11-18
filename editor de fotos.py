@@ -36,7 +36,7 @@ def quitar_fondo_de_la_imagen(imagen):
     
     directorio = os.path.dirname(os.path.abspath(__file__))
 
-    input_path = os.path.join(directorio, f"{imagen}daniPerro.png")
+    input_path = os.path.join(directorio, f"{imagen}.png")
     
     output_path = os.path.join(directorio, f"{imagen} mejorado.png")
 
@@ -50,9 +50,19 @@ def quitar_fondo_de_la_imagen(imagen):
     input()
     
 def mejorar_calidad_de_la_imagen(imagen):
+    def calcular_tile(image):
+        w, h = image.size
+        lado = max(w, h)
+
+        if lado > 4000:
+            return 400
+        elif lado > 2000:
+            return 200
+        else:
+            return 0
+
     
     directorio = os.path.dirname(os.path.abspath(__file__))
-    
     escalas = os.path.join(directorio, "REAL-ESRGAN_SCALE")
     modelo_path = os.path.join(escalas, "RealESRGAN_x4plus.pth")
     input_path = os.path.join(directorio, f"{imagen}.png")
@@ -67,13 +77,6 @@ def mejorar_calidad_de_la_imagen(imagen):
     try:
         device_torch = torch.device(device)
         image = Image.open(input_path).convert("RGB")
-
-        width, height = image.size
-        if max(width, height) >= 2000:
-            tile = 200
-        else:
-            tile = 0
-
         model = RRDBNet(
             num_in_ch=3, num_out_ch=3,
             num_feat=64, num_block=23,
@@ -86,7 +89,7 @@ def mejorar_calidad_de_la_imagen(imagen):
             model=model,
             dni_weight=None,
             device=device_torch,
-            tile=tile,
+            tile=calcular_tile(image),
             tile_pad=10,
             pre_pad=0,
             half=False
@@ -96,17 +99,17 @@ def mejorar_calidad_de_la_imagen(imagen):
         Image.fromarray(output).save(output_path)
         
         print("¡Calidad mejorada con éxito!")
-        input()
     except Exception as e:
         print("Ocurrió un error al mejorar la imagen: ", e)
 
 try:
+    imagen = None
+    print(f"imágen elegida: {imagen}.png")
     opción = int(input("¿Que te gustaría hacer? ").strip())
-
     match opción:
         case 1:
             quitar_fondo_de_la_imagen()
         case 2:
-            mejorar_calidad_de_la_imagen()
+            mejorar_calidad_de_la_imagen(imagen)
 except:
     print("Ocurrió un error")

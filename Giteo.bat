@@ -2,7 +2,7 @@
 chcp 65001
 SETLOCAL ENABLEDELAYEDEXPANSION
 SET MAX_INTENTOS=5
-SET INTENTO=5
+SET INTENTO=1
 SET INTENTO_DE_PUSHEO=1
 SET COMMIT_MESSAGE=Mi primer proyecto de edición
 echo .........................................................................
