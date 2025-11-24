@@ -18,38 +18,27 @@ from basicsr.archs.rrdbnet_arch import RRDBNet
 from PIL import Image
 import torch
 
+imagen = None
+
 print("✅ Todo importado correctamente.\n")
-
-
 print("MENÚ DE OPCIONES: ")
 
 print("1: Quitar el fondo de un archivo")
 print("2: Mejorar la calidad de una foto")
 
-# try:
-#     datos = torch.load(modelo_path, map_location="cpu")
-#     print("Claves dentro del archivo:", list(datos.keys()))
-# except Exception as e:
-#     print("Error al abrir el modelo:", e)
+directorio = os.path.dirname(os.path.abspath(__file__))
+input_path = os.path.join(directorio, f"{imagen}.png")
+output_path = os.path.join(directorio, f"{imagen} mejorado.png")
 
-def quitar_fondo_de_la_imagen(imagen):
-    
-    directorio = os.path.dirname(os.path.abspath(__file__))
-
-    input_path = os.path.join(directorio, f"{imagen}.png")
-    
-    output_path = os.path.join(directorio, f"{imagen} mejorado.png")
-
+def quitar_fondo_de_la_imagen():
     image = Image.open(input_path)
-
     output_image = remove(image)
-
     output_image.save(output_path)
 
     print("¡Fondo eliminado con éxito!")
     input()
     
-def mejorar_calidad_de_la_imagen(imagen):
+def mejorar_calidad_de_la_imagen():
     def calcular_tile(image):
         w, h = image.size
         lado = max(w, h)
@@ -73,6 +62,11 @@ def mejorar_calidad_de_la_imagen(imagen):
         return
     
     device = "cuda" if torch.cuda.is_available() else "cpu"
+    if torch.cuda.is_available():
+        torch.cuda.set_per_process_memory_fraction(0.8)
+        torch.backends.cudnn.benchmark = False
+        torch.backends.cudnn.deterministic = True
+
     print(f"Dispositivo seleccionado: {device}")
     try:
         device_torch = torch.device(device)
@@ -99,17 +93,19 @@ def mejorar_calidad_de_la_imagen(imagen):
         Image.fromarray(output).save(output_path)
         
         print("¡Calidad mejorada con éxito!")
+        
     except Exception as e:
         print("Ocurrió un error al mejorar la imagen: ", e)
+    finally:
+        torch.cuda.empty_cache() #Esto limpia los datos basura
 
 try:
-    imagen = None
     print(f"imágen elegida: {imagen}.png")
     opción = int(input("¿Que te gustaría hacer? ").strip())
     match opción:
         case 1:
             quitar_fondo_de_la_imagen()
         case 2:
-            mejorar_calidad_de_la_imagen(imagen)
+            mejorar_calidad_de_la_imagen()
 except:
     print("Ocurrió un error")
