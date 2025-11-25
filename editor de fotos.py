@@ -1,11 +1,5 @@
 import numpy as np, os
 
-# def limpiar_entorno():
-#     print("🔧 Limpiando entorno para Real-ESRGAN...")
-#     os.system("pip uninstall torchaudio torchvision -y")
-#     os.system("pip install torchvision==0.14.1")
-#     print("✅ Entorno listo para mejorar imágenes sin conflictos.")
-
 if int(np.__version__.split('.')[0]) >= 2:
     print("ERROR: NumPy 2.x no es compatible con Real-ESRGAN.")
     print("Por favor, ejecutá: pip install numpy==1.26.4")
