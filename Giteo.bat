@@ -4,7 +4,7 @@ SETLOCAL ENABLEDELAYEDEXPANSION
 SET MAX_INTENTOS=5
 SET INTENTO=1
 SET INTENTO_DE_PUSHEO=1
-SET COMMIT_MESSAGE=Mi primer proyecto de edición
+SET COMMIT_MESSAGE=Editor de fotos creada
 echo .........................................................................
 echo Giteo v2.3 pro
 echo Iniciando subida a GitHub...
@@ -135,7 +135,7 @@ echo .........................................................................
         git init
         git add .
         git commit -m "%COMMIT_MESSAGE%"
-        git branch -M 
+        git branch -M main
         SET /P "URL=Ingresa la URL del repositorio de GitHub: "
         git remote add origin %URL%
     ) ELSE (
