@@ -18,7 +18,7 @@ from basicsr.archs.rrdbnet_arch import RRDBNet
 from PIL import Image
 import torch
 
-imagen = None
+imagen = "哔哩哔哩的横幅 cpu"
 
 print("✅ Todo importado correctamente.\n")
 print("MENÚ DE OPCIONES: ")
@@ -61,15 +61,8 @@ def mejorar_calidad_de_la_imagen():
         print("El modelo no se encuentra en la ruta especificada:", modelo_path)
         return
     
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    if torch.cuda.is_available():
-        torch.cuda.set_per_process_memory_fraction(0.8)
-        torch.backends.cudnn.benchmark = False
-        torch.backends.cudnn.deterministic = True
-
-    print(f"Dispositivo seleccionado: {device}")
     try:
-        device_torch = torch.device(device)
+        device_torch = torch.device("cpu")
         image = Image.open(input_path).convert("RGB")
         model = RRDBNet(
             num_in_ch=3, num_out_ch=3,
