@@ -1,6 +1,4 @@
-import asyncio
-import sys
-import datetime
+import asyncio, sys, datetime, pkg_resources, subprocess
 from importlib.metadata import version, PackageNotFoundError
 import importlib.util
 
@@ -19,6 +17,42 @@ def registrar_version(paquete, archivo_log="paquetes_ia_log.txt"):
         f.write(linea)
 
     print(f"📌 Registro guardado: {paquete} → {version_actual}")
+
+COMPAT = {
+    "torch": "2.0.1",
+    "torchvision": "0.15.2",
+    "torchaudio": "2.0.2",
+    "torch-directml": "0.2.5.dev240914",
+    "realesrgan": "0.3.0",
+    "gfpgan": "1.3.8",
+    "rembg": "2.0.67",
+    "basicsr": "1.4.2"
+}
+
+
+def limpiar_y_sincronizar_paquetes(compat):
+    instalados = {pkg.key: pkg.version for pkg in pkg_resources.working_set}
+
+    for paquete, version_ok in compat.items():
+        version_instalada = instalados.get(paquete)
+
+        if version_instalada and version_instalada != version_ok:
+            print(f"🧹 {paquete} {version_instalada} ≠ {version_ok} → desinstalando")
+            subprocess.run(
+                [sys.executable, "-m", "pip", "uninstall", paquete, "-y"],
+                stdout=subprocess.DEVNULL
+            )
+
+        if not version_instalada or version_instalada != version_ok:
+            print(f"📦 Instalando {paquete}=={version_ok}")
+            subprocess.run(
+                [sys.executable, "-m", "pip", "install", f"{paquete}=={version_ok}"],
+                check=True
+            )
+
+    print("✅ Entorno estabilizado.")
+
+
 
 # ------------------ UTILIDADES ------------------ #
 
@@ -90,7 +124,7 @@ async def actualizar_paquetes(lista_de_paquetes, registrar=False):
 
 async def main():
      # Verifica e instala paquetes faltantes automáticamente
-
+     limpiar_y_sincronizar_paquetes()
      await verificar_paquetes()
      #En el main yo borré actualizar_paquetes, porque está en la función asíncrona que verifica si uno está instalado o no?}
 

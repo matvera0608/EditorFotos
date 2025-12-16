@@ -1,5 +1,17 @@
 import torch
-import torch_directml #Esto me subraya amarillo diciendo " No se ha podido resolver la importación "torch_directml". "
+import torch_directml
+
+import torch, torch_directml
+
+print("Torch:", torch.__version__)
+print("CUDA disponible:", torch.cuda.is_available())
+
+try:
+    dml = torch_directml.device()
+    print("DirectML OK:", dml)
+except Exception as e:
+    print("DirectML no disponible:", e)
+
 
 def obtener_device():
     if torch.cuda.is_available():
@@ -13,12 +25,12 @@ def obtener_device():
                 print("🔧 Usando CUDA")
                 return torch.device("cuda")
         except:
+            print("🔧 Usando CPU")
             return torch.device("cpu")
     else:
         try:
-            print("🔧 Usando DirectML como aceleración alternativa.")
+            print("🔧 Usando DirectML como aceleración alternativa.") #Esto me imprime al usar mi vieja Notebook
             return torch_directml.device()
         except:
             print("🔧 No hay aceleración disponible, usando CPU.")
             return torch.device("cpu")
-
