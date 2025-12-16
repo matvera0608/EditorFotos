@@ -4,7 +4,7 @@ SETLOCAL ENABLEDELAYEDEXPANSION
 SET MAX_INTENTOS=5
 SET INTENTO=1
 SET INTENTO_DE_PUSHEO=1
-SET COMMIT_MESSAGE=Editor de fotos creada
+SET COMMIT_MESSAGE=Mejorando cada vez más
 echo .........................................................................
 echo Giteo v2.3 pro
 echo Iniciando subida a GitHub...

@@ -23,21 +23,24 @@ def registrar_version(paquete, archivo_log="paquetes_ia_log.txt"):
 # ------------------ UTILIDADES ------------------ #
 
 async def verificar_paquetes():
-     paquetes = ["gfpgan", "realesrgan", "torch", "torchvision", "torchaudio"]
+    paquetes = ["gfpgan", "realesrgan","torch-directml", "rembg", "torch", "torchvision", "torchaudio"]
 
-     estado = {pkg: importlib.util.find_spec(pkg) is not None for pkg in paquetes}
+    estado = {pkg: importlib.util.find_spec(pkg) is not None for pkg in paquetes}
 
-     for pkg, instalado in estado.items():
-          if not instalado:
-               print(f"📦 {pkg} no estaba instalado, se instalará ahora...")
-          else:
-               print(f"✅ {pkg} ya está instalado.")
-     
-     faltantes = [pkg for pkg, instalado in estado.items() if not instalado]
+    for pkg in paquetes:
+        registrar_version(pkg)
 
-     if faltantes:
-          print("🚀 Instalando paquetes faltantes:", ", ".join(faltantes))
-          await actualizar_paquetes(faltantes, False)
+    for pkg, instalado in estado.items():
+        if not instalado:
+            print(f"📦 {pkg} no estaba instalado, se instalará ahora...")
+        else:
+            print(f"✅ {pkg} ya está instalado.")
+    
+    faltantes = [pkg for pkg, instalado in estado.items() if not instalado]
+
+    if faltantes:
+        print("🚀 Instalando paquetes faltantes:", ", ".join(faltantes))
+        await actualizar_paquetes(faltantes, False)
 
 async def desinstalar(paquete):
     proc = await asyncio.create_subprocess_exec(

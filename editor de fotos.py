@@ -1,4 +1,5 @@
 import numpy as np, os
+from device_detection import obtener_device
 
 if int(np.__version__.split('.')[0]) >= 2:
     print("ERROR: NumPy 2.x no es compatible con Real-ESRGAN.")
@@ -12,7 +13,7 @@ from basicsr.archs.rrdbnet_arch import RRDBNet
 from PIL import Image
 import torch
 
-imagen = "哔哩哔哩的横幅 cpu"
+imagen = "Mirá"
 
 print("✅ Todo importado correctamente.\n")
 print("MENÚ DE OPCIONES: ")
@@ -56,7 +57,7 @@ def mejorar_calidad_de_la_imagen():
         return
     
     try:
-        device_torch = torch.device("cpu")
+        device_torch = obtener_device()
         image = Image.open(input_path).convert("RGB")
         model = RRDBNet(
             num_in_ch=3, num_out_ch=3,
