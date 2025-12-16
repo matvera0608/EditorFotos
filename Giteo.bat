@@ -4,7 +4,7 @@ SETLOCAL ENABLEDELAYEDEXPANSION
 SET MAX_INTENTOS=5
 SET INTENTO=1
 SET INTENTO_DE_PUSHEO=1
-SET COMMIT_MESSAGE=Se ha puesto un modelo de upscaling más
+SET COMMIT_MESSAGE=Mejorando aún mas mi editor de fotos
 echo .........................................................................
 echo Giteo v2.3 pro
 echo Iniciando subida a GitHub...
