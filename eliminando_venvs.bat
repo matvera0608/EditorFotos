@@ -1,11 +1,10 @@
 @echo off
 
-git rm -rf --cached .
+git rm -r --cached editor_cuda_env 2>nul
+git rm -r --cached editor_dml_env 2>nul
 
-git reset --soft origin/main
-echo Restaurando todo a la normalidad
 git add .
-git commit -m "Versión limpia sin venvs"
+git commit -m "Version limpia sin venvs, se puede subir normalmente los archivos"
 pause
 git push -f origin main
 pause
