@@ -1,8 +1,6 @@
 import torch
 import torch_directml
 
-import torch, torch_directml
-
 print("Torch:", torch.__version__)
 print("CUDA disponible:", torch.cuda.is_available())
 
@@ -34,3 +32,27 @@ def obtener_device():
         except:
             print("🔧 No hay aceleración disponible, usando CPU.")
             return torch.device("cpu")
+        
+        
+def detectar_backend():
+    # 1. Intentar CUDA (solo si PyTorch real está instalado)
+    try:
+        import torch
+        if hasattr(torch, "cuda") and torch.cuda.is_available():
+            print("⚡ Detectado backend: CUDA (ASUS TUF)")
+            return "cuda"
+
+
+    except:
+        pass
+
+    # 2. Intentar DirectML
+    if importlib.util.find_spec("torch_directml") is not None:
+        print("💠 Detectado backend: DirectML (Notebook)")
+        return "dml"
+
+
+
+    # 3. CPU puro
+    print("🖥️ Detectado backend: CPU (modo básico)")
+    return "cpu"

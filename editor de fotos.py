@@ -9,6 +9,7 @@ if int(np.__version__.split('.')[0]) >= 2:
 
 from rembg import remove
 from realesrgan import RealESRGANer
+from gfpgan import GFPGANer
 from basicsr.archs.rrdbnet_arch import RRDBNet
 from PIL import Image
 import torch

@@ -1,4 +1,4 @@
-import asyncio, sys, datetime, pkg_resources, subprocess, torch
+import asyncio, sys, datetime, pkg_resources, subprocess
 from importlib.metadata import version, PackageNotFoundError
 import importlib.util
 
@@ -18,31 +18,7 @@ def registrar_version(paquete, archivo_log="paquetes_ia_log.txt"):
 
     print(f"📌 Registro guardado: {paquete} → {version_actual}")
 
-LIBRERIAS_PARA_CPU_Y_CUDA = {
-    "torch": "2.0.1",
-    "torchvision": "0.15.2",
-    "torchaudio": "2.0.2",
-    "basicsr": "1.4.2",
-    "realesrgan": "0.3.0",
-    "gfpgan": "1.3.8",
-    "rembg": "2.0.67"
-}
 
-LIBRERIAS_PARA_DML = {
-    "torch-directml": "0.2.5.dev240914",
-    "basicsr": "1.4.2",
-    "realesrgan": "0.3.0",
-    "gfpgan": "1.3.8",
-    "rembg": "2.0.67"
-}
-
-def detectar_backend():
-    if torch.cuda.is_available():
-        return "cuda"
-    elif importlib.util.find_spec("torch_directml") is not None:
-        return "dml"
-    else:
-        return "cpu"
 
 def limpiar_y_sincronizar_paquetes(compat):
     instalados = {pkg.key: pkg.version for pkg in pkg_resources.working_set}
@@ -66,26 +42,15 @@ def limpiar_y_sincronizar_paquetes(compat):
 
     print("✅ Entorno estabilizado.")
 
+# def torch_es_valido():
+#     try:
+#         import torch
+#         return hasattr(torch, "Tensor") and hasattr(torch, "nn")
+#     except:
+#         return False
+
 
 # ------------------ UTILIDADES ------------------ #
-LIBRERIAS_IA = [
-    "torch", "torchvision", "torchaudio",
-    "torch-directml",
-    "basicsr", "realesrgan", "gfpgan", "rembg",
-    "onnx", "onnxruntime", "onnxruntime-directml"
-]
-
-async def eliminar_librerias(lista):
-    print("🧹 Eliminando librerías de IA...")
-    for pkg in lista:
-        proc = await asyncio.create_subprocess_exec(
-            sys.executable, "-m", "pip", "uninstall", "-y", pkg,
-            stdout=asyncio.subprocess.DEVNULL,
-            stderr=asyncio.subprocess.DEVNULL
-        )
-        await proc.wait()
-        print(f"⛔ {pkg} eliminado.")
-    print("✨ Limpieza completa.")
 
 
 async def verificar_paquetes():
@@ -154,25 +119,25 @@ async def actualizar_libreria(paquete, registrar):
 async def actualizar_paquetes(lista_de_paquetes, registrar=False):
     await asyncio.gather(*(actualizar_libreria(package, registrar) for package in lista_de_paquetes))
 
-async def main():
+# async def main():
     
-    # await eliminar_librerias(LIBRERIAS_IA)
     
-    backend = detectar_backend()
+#     backend = detectar_backend()
 
-    match backend:
-        case "cuda":
-            limpiar_y_sincronizar_paquetes(LIBRERIAS_PARA_CPU_Y_CUDA)
+#     match backend:
+#         case "cuda":
+#             limpiar_y_sincronizar_paquetes(LIBRERIAS_PARA_CPU_Y_CUDA)
 
-        case "dml":
-            limpiar_y_sincronizar_paquetes(LIBRERIAS_PARA_DML)
+#         case "dml":
+#             limpiar_y_sincronizar_paquetes(LIBRERIAS_PARA_DML)
 
-        case _:
-            limpiar_y_sincronizar_paquetes(LIBRERIAS_PARA_CPU_Y_CUDA)
+#         case _:
+#             limpiar_y_sincronizar_paquetes(LIBRERIAS_PARA_CPU_Y_CUDA)
  
-    await verificar_paquetes()
+#     await verificar_paquetes()
+#     await instalar_torch_si_falta()
 
 if __name__ == "__main__":
      
-    asyncio.run(main())
+    # asyncio.run(main())
     print("🎉 Tarea de actualización y verificación de paquetes faltantes de IA completada.")
