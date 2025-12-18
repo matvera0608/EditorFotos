@@ -14,7 +14,7 @@ from basicsr.archs.rrdbnet_arch import RRDBNet
 from PIL import Image
 import torch
 
-imagen = "Mirá"
+imagen = "rostro"
 
 print("✅ Todo importado correctamente.\n")
 print("MENÚ DE OPCIONES: ")

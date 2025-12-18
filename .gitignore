@@ -4,3 +4,4 @@ __pycache__/
 .venv/
 editor_cuda_env/ 
 editor_dml_env/ 
+test_images/
