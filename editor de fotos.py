@@ -1,4 +1,5 @@
 import numpy as np, os
+from device_detection import obtener_device
 
 if int(np.__version__.split('.')[0]) >= 2:
     print("ERROR: NumPy 2.x no es compatible con Real-ESRGAN.")
@@ -6,13 +7,16 @@ if int(np.__version__.split('.')[0]) >= 2:
     input()
     exit()
 
+
+
 from rembg import remove
 from realesrgan import RealESRGANer
+from gfpgan import GFPGANer
 from basicsr.archs.rrdbnet_arch import RRDBNet
 from PIL import Image
 import torch
 
-imagen = "哔哩哔哩的横幅 cpu"
+imagen = input("¿Qué imagen vas a editar?")
 
 print("✅ Todo importado correctamente.\n")
 print("MENÚ DE OPCIONES: ")
@@ -22,7 +26,7 @@ print("2: Mejorar la calidad de una foto")
 
 directorio = os.path.dirname(os.path.abspath(__file__))
 input_path = os.path.join(directorio, f"{imagen}.png")
-output_path = os.path.join(directorio, f"{imagen} mejorado.png")
+output_path = os.path.join(directorio, f"{imagen} sin fondo.png")
 
 def quitar_fondo_de_la_imagen():
     image = Image.open(input_path)
@@ -47,7 +51,7 @@ def mejorar_calidad_de_la_imagen():
     
     directorio = os.path.dirname(os.path.abspath(__file__))
     escalas = os.path.join(directorio, "REAL-ESRGAN_SCALE")
-    modelo_path = os.path.join(escalas, "RealESRGAN_x4plus.pth")
+    modelo_path = os.path.join(escalas, "RealESRGAN_x4plus_anime_6B.pth")
     input_path = os.path.join(directorio, f"{imagen}.png")
     output_path = os.path.join(directorio, f"{imagen} mejorado.png")
     
@@ -56,18 +60,29 @@ def mejorar_calidad_de_la_imagen():
         return
     
     try:
-        device_torch = torch.device("cpu")
+        device_torch = obtener_device()
         image = Image.open(input_path).convert("RGB")
-        model = RRDBNet(
-            num_in_ch=3, num_out_ch=3,
-            num_feat=64, num_block=23,
-            num_grow_ch=32, scale=4
-        )
+        # model = RRDBNet(
+        #     num_in_ch=3, num_out_ch=3,
+        #     num_feat=64, num_block=23,
+        #     num_grow_ch=32, scale=4
+        # )
         
+        # upsampler = RealESRGANer(
+        #     scale=4,
+        #     model_path=modelo_path,
+        #     # model=model,
+        #     dni_weight=None,
+        #     device=device_torch,
+        #     tile=calcular_tile(image),
+        #     tile_pad=10,
+        #     pre_pad=0,
+        #     half=False
+        # )
+
         upsampler = RealESRGANer(
             scale=4,
             model_path=modelo_path,
-            model=model,
             dni_weight=None,
             device=device_torch,
             tile=calcular_tile(image),
@@ -75,6 +90,7 @@ def mejorar_calidad_de_la_imagen():
             pre_pad=0,
             half=False
         )
+
         image_np = np.array(image) 
         output, _ = upsampler.enhance(image_np, outscale=4)
         Image.fromarray(output).save(output_path)

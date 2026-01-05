@@ -1,4 +1,7 @@
 # Python 
 __pycache__/ 
 *.pyc 
-.venv/ 
+.venv/
+editor_cuda_env/ 
+editor_dml_env/ 
+test_images/
