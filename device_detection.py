@@ -17,4 +17,3 @@ def obtener_device():
         pass  # DLL incompatible → ignorar
 
     return torch.device("cpu")
-

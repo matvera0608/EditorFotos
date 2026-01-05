@@ -7,8 +7,6 @@ if int(np.__version__.split('.')[0]) >= 2:
     input()
     exit()
 
-
-
 from rembg import remove
 from realesrgan import RealESRGANer
 from gfpgan import GFPGANer
